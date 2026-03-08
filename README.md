@@ -1,7 +1,7 @@
 # 🏛️ AI 官僚帝国 - 使用手册
 
 > **启动口令**: `🍀圣旨到！`  
-> **版本**: v1.0 (2026-03-08)  
+> **版本**: v1.0.1 (2026-03-08)  
 > **状态**: ✅ 已部署到 GitHub，可随时克隆使用  
 > **仓库**: https://github.com/miaouai/bureaucracy-empire
 
@@ -9,33 +9,61 @@
 
 ## ⚡ 快速安装（3 步搞定）
 
-### 方案 A: 从零开始安装
+### 方案 A: 自动安装（推荐）
 
 ```bash
 # 1. 克隆仓库
 git clone https://github.com/miaouai/bureaucracy-empire.git
 cd bureaucracy-empire
 
+# 2. 运行一键配置脚本
+bash install.sh
+
+# 完成！现在可以使用了
+```
+
+### 方案 B: 手动安装
+
+```bash
+# 1. 克隆到本地
+git clone https://github.com/miaouai/bureaucracy-empire.git
+cd bureaucracy-empire
+
 # 2. 复制到 active_skills 目录
 cp -r . /app/working/active_skills/bureaucracy-empire/
 
-# 3. 验证安装
-ls /app/working/active_skills/bureaucracy-empire/SKILL.md
-# 应该显示文件存在 ✅
+# 3. 编辑 AGENTS.md，添加触发词配置（关键！）
+# 在文件中添加以下内容：
+cat >> /app/working/AGENTS.md << 'EOF'
+
+### ⚡ 技能触发规则
+
+**强制触发关键词**（检测到必须立即加载对应技能）：
+
+| 关键词 | 触发技能 | 说明 |
+|--------|----------|------|
+| `🍀圣旨到！` | `bureaucracy-empire` | 启动官僚帝国任务管理系统，10 人内阁议政 + 六部执行 |
+
+**触发协议**：
+1. 扫描用户消息是否包含触发关键词
+2. 匹配成功 → **立即加载**对应技能
+3. 严格按照技能文档执行流程
+4. 禁止跳过或忽略触发词
+EOF
+
+# 4. 验证安装
+grep "🍀圣旨到" /app/working/AGENTS.md
 ```
 
-### 方案 B: 直接用 GitHub API 下载
+---
 
-```bash
-# 如果 git 不稳定，可以用 curl
-curl -L \
-  -H "Authorization: token YOUR_GITHUB_TOKEN" \
-  -o bureaucracy-empire.tar.gz \
-  https://api.github.com/repos/miaouai/bureaucracy-empire/tarball/main
+## 🔧 故障排查
 
-tar xzf bureaucracy-empire.tar.gz
-mv bureaucracy-empire-* /app/working/active_skills/bureaucracy-empire/
-```
+| 问题 | 检查项 |
+|------|--------|
+| 输入"🍀圣旨到！"没反应 | 确认 AGENTS.md 有触发词配置 |
+| 只回复简单内容不进入五阶段 | 确认 SKILL.md 路径正确 |
+| 没有 logs 目录 | 第一次使用时会自动创建 |
 
 ---
 
@@ -89,6 +117,7 @@ active_skills/bureaucracy-empire/
 ├── SKILL.md                  # 技能核心文档（必读）
 ├── README.md                 # 本使用手册
 ├── 组织结构.md               # 详细职责定义
+├── install.sh                # 一键配置脚本
 │
 ├── memory/                   # 记忆库（运行时动态更新）
 │   ├── 内阁/                 # 10 人智囊团档案
@@ -102,7 +131,7 @@ active_skills/bureaucracy-empire/
 │   └── 奏折.md
 │
 ├── scripts/
-│   └── activate.sh           # 自动激活脚本（可选）
+│   └── activate.sh           # 激活脚本（可选）
 │
 └── logs/                     # 运行记录（每次执行自动生成）
     ├── 圣旨.log              # 所有任务流水账
@@ -203,6 +232,13 @@ A: 从 GitHub 重新 pull 最新代码覆盖本地文件即可：
 cd /app/working/active_skills/bureaucracy-empire
 git pull origin main
 ```
+
+**Q: 为什么我输入"🍀圣旨到！"没有反应？**  
+A: 检查 AGENTS.md 中是否有触发词配置！这是技能能否工作的核心前提。运行：
+```bash
+grep "🍀圣旨到" /app/working/AGENTS.md
+```
+如果没有输出，就是缺少配置。
 
 ---
 
