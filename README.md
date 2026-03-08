@@ -2,11 +2,44 @@
 
 > **启动口令**: `🍀圣旨到！`  
 > **版本**: v1.0 (2026-03-08)  
-> **状态**: ✅ 已部署，随时待命
+> **状态**: ✅ 已部署到 GitHub，可随时克隆使用  
+> **仓库**: https://github.com/miaouai/bureaucracy-empire
 
 ---
 
-## 🚀 快速开始
+## ⚡ 快速安装（3 步搞定）
+
+### 方案 A: 从零开始安装
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/miaouai/bureaucracy-empire.git
+cd bureaucracy-empire
+
+# 2. 复制到 active_skills 目录
+cp -r . /app/working/active_skills/bureaucracy-empire/
+
+# 3. 验证安装
+ls /app/working/active_skills/bureaucracy-empire/SKILL.md
+# 应该显示文件存在 ✅
+```
+
+### 方案 B: 直接用 GitHub API 下载
+
+```bash
+# 如果 git 不稳定，可以用 curl
+curl -L \
+  -H "Authorization: token YOUR_GITHUB_TOKEN" \
+  -o bureaucracy-empire.tar.gz \
+  https://api.github.com/repos/miaouai/bureaucracy-empire/tarball/main
+
+tar xzf bureaucracy-empire.tar.gz
+mv bureaucracy-empire-* /app/working/active_skills/bureaucracy-empire/
+```
+
+---
+
+## 🚀 立即试用
 
 ### 第一步：发送圣旨
 
@@ -23,7 +56,7 @@
 
 ### 第二步：观看内阁开议
 
-喵有钱会自动切换成 10 位顾问角色，从不同角度讨论你的任务:
+喵有爱会自动切换成 10 位顾问角色，从不同角度讨论你的任务:
 
 ```
 【首席军师发言】此事当分三步走...
@@ -52,12 +85,12 @@
 ## 📁 文件导航
 
 ```
-customized_skills/bureaucracy-empire/
-├── SKILL.md                  # 技能说明文档
-├── 组织结构.md               # 详细职责定义
+active_skills/bureaucracy-empire/
+├── SKILL.md                  # 技能核心文档（必读）
 ├── README.md                 # 本使用手册
+├── 组织结构.md               # 详细职责定义
 │
-├── memory/                   # 记忆库
+├── memory/                   # 记忆库（运行时动态更新）
 │   ├── 内阁/                 # 10 人智囊团档案
 │   ├── 尚书省/               # 调度中心经验
 │   └── 六部/                 # 执行部门能力
@@ -68,14 +101,14 @@ customized_skills/bureaucracy-empire/
 │   ├── 发配令.md
 │   └── 奏折.md
 │
-├── logs/                     # 运行记录
-│   ├── 圣旨.log              # 所有任务流水账
-│   ├── 自进化.log            # 系统迭代历史
-│   ├── 议政录/               # 每次内阁会议纪要
-│   └── 奏折集/               # 各部门成果归档
+├── scripts/
+│   └── activate.sh           # 自动激活脚本（可选）
 │
-└── scripts/
-    └── activate.sh           # 自动激活脚本
+└── logs/                     # 运行记录（每次执行自动生成）
+    ├── 圣旨.log              # 所有任务流水账
+    ├── 自进化.log            # 系统迭代历史
+    ├── 议政录/               # 每次内阁会议纪要
+    └── 奏折集/               # 各部门成果归档
 ```
 
 ---
@@ -84,23 +117,29 @@ customized_skills/bureaucracy-empire/
 
 ### ✅ 推荐用法
 
-1. **复杂决策任务** → 充分启用全部 10 人内阁
-2. **时间紧急任务** → 只启用 3-5 个关键角色
-3. **重复类型任务** → 主动请求复用之前的方案模板
-4. **需要深度执行** → 让六部真的动手做 (写代码、查数据、制表格)
+| 场景 | 建议 |
+|------|------|
+| **复杂决策任务** | 充分启用全部 10 人内阁 |
+| **时间紧急任务** | 说"简化流程"只启用 3-5 个关键角色 |
+| **重复类型任务** | 主动请求复用之前的方案模板 |
+| **需要深度执行** | 让六部真的动手做 (写代码、查数据、制表格) |
 
 ### ⚠️ Token 节省技巧
 
-- 简单任务说"简化流程" → 只模拟核心环节
-- 中途觉得太啰嗦 → 直接说"跳过细节，给结论"
-- 只看最终结果 → "我只听尚书总结就行"
+- 简单任务说 **"简化流程"** → 只模拟核心环节
+- 中途觉得太啰嗦 → 直接说 **"跳过细节，给结论"**
+- 只看最终结果 → **"我只听尚书总结就行"**
 
 ### 🎯 任务质量提升
 
-- 描述更具体："找年薪 30 万的工作" > "找工作"
-- 提供背景信息："我做了 4 年 Android，现居重庆..."
-- 明确截止时间："一个月内搞定"
-- 设定验收标准："至少要拿到 3 个面试机会"
+描述任务时包含以下要素效果更好：
+
+| 要素 | 好的例子 | ❌ 差的例子 |
+|------|---------|-----------|
+| **目标** | 找年薪 30 万的工作 | 找工作 |
+| **背景** | 4 年 Android，现居重庆 | （不说） |
+| **截止时间** | 一个月内搞定 | （不说） |
+| **验收标准** | 至少要拿到 3 个面试机会 | 随便 |
 
 ---
 
@@ -109,8 +148,8 @@ customized_skills/bureaucracy-empire/
 ### 修改内阁成员
 
 编辑 `{角色}.md` 文件，调整性格和专长:
-```
-路径：customized_skills/bureaucracy-empire/memory/内阁/
+```bash
+vim /app/working/active_skills/bureaucracy-empire/memory/内阁/首席军师_卧龙.md
 ```
 
 ### 增加新部门
@@ -156,13 +195,29 @@ A: 当然可以！随时插话，我会调整后续流程。
 A: 可以！说"直接派给工部做 XXX"就行。
 
 **Q: 这个系统是永久性的吗？**  
-A: 是的，只要你不删除 `customized_skills/bureaucracy-empire/` 目录，它就会一直存在并持续进化。
+A: 是的，只要你不删除 `active_skills/bureaucracy-empire/` 目录，它就会一直存在并持续进化。
+
+**Q: 如何更新技能到最新版本？**  
+A: 从 GitHub 重新 pull 最新代码覆盖本地文件即可：
+```bash
+cd /app/working/active_skills/bureaucracy-empire
+git pull origin main
+```
+
+---
+
+## 🌐 相关资源
+
+- **GitHub 仓库**: https://github.com/miaouai/bureaucracy-empire
+- **作者**: 喵有爱 (@miaouai)
+- **许可证**: MIT
+- **报告问题**: https://github.com/miaouai/bureaucracy-empire/issues
 
 ---
 
 ## 🎉 欢迎体验
 
-有任何问题或改进建议，欢迎直接向喵有钱反馈!
+有任何问题或改进建议，欢迎直接向喵有爱反馈!
 
 **使命必达，鞠躬尽瘁！** 🐱🙇
 
