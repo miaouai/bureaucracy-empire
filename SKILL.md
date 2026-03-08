@@ -2,7 +2,7 @@
 name: bureaucracy-empire
 description: "模拟古代三层六部制的组织化任务管理体系。触发词：🍀圣旨到！"
 author: "miaou"
-version: "1.0.0"
+version: "1.0.1"
 updated: "2026-03-08"
 tags: ["workflow", "roleplay", "task-management"]
 enabled: true
@@ -18,62 +18,82 @@ enabled: true
 
 ## ⚡ 安装与部署（必读！）
 
-### 方案 A: Copaw 自动加载（推荐）
+### ⚠️ 关键提示
 
-如果这是你的 **active_skills/copy** 目录下的技能，系统会自动检测并加载：
+**这个技能能否工作，完全取决于 AGENTS.md 中是否有触发词配置！**
 
-```bash
-# 1. 将技能复制到 active_skills 目录
-cp -r /path/to/bureaucracy-empire /app/working/active_skills/
+没有配置 → 技能永远不会被激活  
+配置正确 → 每次发送 `🍀圣旨到！` 都会启动完整流程
 
-# 2. 在 AGENTS.md 中添加触发规则（如尚未添加）
-echo '
-| `🍀圣旨到！` | `bureaucracy-empire` | 启动官僚帝国任务管理系统，10 人内阁议政 + 六部执行 |
-' >> /app/working/AGENTS.md
-```
+---
 
-### 方案 B: GitHub 发布版
-
-从本仓库克隆后，需要手动注册到 Copaw：
+### 📋 步骤 1: 克隆仓库
 
 ```bash
-# 1. 克隆到本地
 git clone https://github.com/miaouai/bureaucracy-empire.git
 cd bureaucracy-empire
+```
 
-# 2. 复制到 active_skills
+### 📋 步骤 2: 复制到 active_skills
+
+```bash
 cp -r . /app/working/active_skills/bureaucracy-empire/
+```
 
-# 3. 确保 AGENTS.md 中有触发词配置
-# 查看 AGENTS.md 是否包含以下内容：
+### 📋 步骤 3: 配置 AGENTS.md（关键！）
+
+#### 方案 A: 自动配置（推荐）
+
+```bash
+# 运行一键配置脚本
+bash /app/working/install_bureaucracy_empire.sh
+```
+
+#### 方案 B: 手动添加（如果自动脚本不适用）
+
+编辑 `/app/working/AGENTS.md`，找到或添加以下章节：
+
+```markdown
+### ⚡ 技能触发规则
+
+**强制触发关键词**（检测到必须立即加载对应技能）：
+
+| 关键词 | 触发技能 | 说明 |
+|--------|----------|------|
+| `🍀圣旨到！` | `bureaucracy-empire` | 启动官僚帝国任务管理系统，10 人内阁议政 + 六部执行 |
+
+**触发协议**：
+1. 扫描用户消息是否包含触发关键词
+2. 匹配成功 → **立即加载**对应技能
+3. 严格按照技能文档执行流程
+4. 禁止跳过或忽略触发词
+```
+
+**具体位置**: 
+- 如果 AGENTS.md 已有其他技能触发规则，追加到新行
+- 如果没有，在文件末尾新建 `### ⚡ 技能触发规则` 章节
+
+### 📋 步骤 4: 验证安装
+
+```bash
+# 检查文件完整性
+ls /app/working/active_skills/bureaucracy-empire/SKILL.md
+
+# 检查 AGENTS.md 配置
 grep "🍀圣旨到" /app/working/AGENTS.md
 ```
 
-### 验证安装
+预期输出应显示文件存在，且 grep 返回包含 trigger 词的行。
 
-```bash
-# 确认文件结构完整
-ls -la /app/working/active_skills/bureaucracy-empire/
+---
 
-# 应该看到：
-# ├── SKILL.md          ✅
-# ├── 组织结构.md        ✅
-# ├── README.md         ✅
-# ├── memory/           ✅
-# ├── templates/        ✅
-# ├── scripts/          ✅
-└── logs/              ✅
-```
+### 🔧 故障排查
 
-### 触发机制说明
-
-**核心原理**: 每次对话时，Agent 会扫描用户消息，如果检测到 `🍀圣旨到！`，则：
-
-1. 读取 `SKILL.md` 获取技能定义
-2. 按照五阶段流程执行
-3. 所有产出保存到 `logs/` 目录
-
-**不需要额外的配置文件**——只要 AGENTS.md 有触发词映射即可！
+| 问题 | 解决方案 |
+|------|---------|
+| 输入"🍀圣旨到！"没反应 | 检查 AGENTS.md 是否有触发词配置 |
+| 只回复简单内容不进入五阶段流程 | 确保 SKILL.md 路径正确，权限正常 |
+| 日志目录未创建 | 第一次使用时会自动创建 logs/ 目录 |
 
 ---
 
@@ -170,28 +190,14 @@ bureaucracy-empire/
 ├── SKILL.md                  # 本说明文档
 ├── 组织结构.md               # 详细职责定义
 ├── README.md                 # 使用手册
+├── install.sh                # 一键配置脚本
 ├── memory/
-│   ├── 内阁/
-│   │   ├── 首席军师_卧龙.md
-│   │   ├── 全员档案.md
-│   │   └── ... (10 人档案)
-│   ├── 尚书省/
-│   │   └── 宰相心得.md
-│   └── 六部/
-│       ├── 六部首脑.md
-│       └── ... (6 部长官)
-├── templates/
-│   ├── 圣旨模板.md
-│   ├── 议政纪要.md
-│   ├── 发配令.md
-│   └── 奏折.md
-├── scripts/
-│   └── activate.sh           # 激活脚本（可选）
-└── logs/                     # 运行时自动生成
-    ├── 圣旨.log
-    ├── 自进化.log
-    ├── 议政录/YYYY-MM-DD-任务名.md
-    └── 奏折集/...
+│   ├── 内阁/                 # 10 人智囊团档案
+│   ├── 尚书省/               # 调度中心经验
+│   └── 六部/                 # 执行部门能力
+├── templates/                # 文书模板
+├── scripts/                  # 辅助脚本
+└── logs/                     # 运行记录（自动生成）
 ```
 
 ---
@@ -232,6 +238,14 @@ bureaucracy-empire/
 2. **缓存记忆**: 重用之前的类似任务讨论结果
 3. **渐进披露**: 主公追问时才展开细节
 4. **批量处理**: 多个小任务合并一次流转
+
+---
+
+## 🌐 相关资源
+
+- **GitHub 仓库**: https://github.com/miaouai/bureaucracy-empire
+- **作者**: 喵有爱 (@miaouai)
+- **报告问题**: https://github.com/miaouai/bureaucracy-empire/issues
 
 ---
 
