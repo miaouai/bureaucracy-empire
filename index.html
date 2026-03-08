@@ -4,55 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏛️ 官僚帝国 - Bureaucracy Empire</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #24292e;
             max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
-            background: #f5f5f5;
+            padding: 40px 20px;
+            background: #f6f8fa;
         }
-        .container {
+        .markdown-body {
             background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 45px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         }
-        h1 { color: #24292e; border-bottom: 2px solid #eaecef; padding-bottom: 0.3em; }
-        h2 { color: #24292e; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 24px; }
-        code { background: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; }
-        pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto; }
+        h1, h2, h3, h4 { margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; color: #24292e; }
+        h1 { font-size: 2em; border-bottom: 1px solid #eaecef; padding-bottom: .3em; }
+        h2 { font-size: 1.5em; border-bottom: 1px solid #eaecef; padding-bottom: .3em; }
+        h3 { font-size: 1.25em; }
+        p { margin-top: 0; margin-bottom: 16px; }
         a { color: #0366d6; text-decoration: none; }
         a:hover { text-decoration: underline; }
-        blockquote { border-left: 4px solid #dfe2e5; padding: 0 16px; color: #6a737d; }
+        code { background: rgba(27,31,35,0.05); padding: 0.2em 0.4em; border-radius: 3px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 85%; }
+        pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; }
+        pre code { background: none; padding: 0; }
+        blockquote { border-left: 4px solid #dfe2e5; padding: 0 16px; color: #6a737d; margin: 0 0 16px 0; }
         table { border-collapse: collapse; width: 100%; margin: 16px 0; }
         th, td { border: 1px solid #dfe2e5; padding: 8px 12px; text-align: left; }
         th { background: #f6f8fa; font-weight: 600; }
+        tr:nth-child(2n) { background: #f6f8fa; }
+        ul, ol { padding-left: 2em; margin: 0 0 16px 0; }
+        li { margin: 0; }
+        hr { border: 0; border-top: 1px solid #eaecef; margin: 24px 0; }
+        img { max-width: 100%; box-sizing: content-box; }
         .emoji { font-size: 1.2em; }
     </style>
 </head>
 <body>
-    <div class="container" id="readme"></div>
+    <div class="markdown-body" id="readme"></div>
     <script>
         fetch('README.md')
-            .then(r => r.text())
-            .then(md => {
-                // Simple markdown to HTML conversion
-                const html = md
-                    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                    .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
-                    .replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>')
-                    .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-                    .replace(/\*(.*)\*/gim, '<em>$1</em>')
-                    .replace(/`(.*?)`/gim, '<code>$1</code>')
-                    .replace(/```(\w*)\n([\s\S]*?)```/gim, '<pre><code class="language-$1">$2</code></pre>')
-                    .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
-                    .replace(/\n/gim, '<br>');
-                document.getElementById('readme').innerHTML = html;
+            .then(response => {
+                if (!response.ok) throw new Error('无法加载 README.md');
+                return response.text();
+            })
+            .then(markdown => {
+                document.getElementById('readme').innerHTML = marked.parse(markdown);
+            })
+            .catch(error => {
+                document.getElementById('readme').innerHTML = '<h1>加载失败</h1><p>无法加载 README.md 文件，请检查文件是否存在。</p>';
+                console.error('Error:', error);
             });
     </script>
 </body>
