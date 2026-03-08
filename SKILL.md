@@ -16,6 +16,67 @@ enabled: true
 
 ---
 
+## ⚡ 安装与部署（必读！）
+
+### 方案 A: Copaw 自动加载（推荐）
+
+如果这是你的 **active_skills/copy** 目录下的技能，系统会自动检测并加载：
+
+```bash
+# 1. 将技能复制到 active_skills 目录
+cp -r /path/to/bureaucracy-empire /app/working/active_skills/
+
+# 2. 在 AGENTS.md 中添加触发规则（如尚未添加）
+echo '
+| `🍀圣旨到！` | `bureaucracy-empire` | 启动官僚帝国任务管理系统，10 人内阁议政 + 六部执行 |
+' >> /app/working/AGENTS.md
+```
+
+### 方案 B: GitHub 发布版
+
+从本仓库克隆后，需要手动注册到 Copaw：
+
+```bash
+# 1. 克隆到本地
+git clone https://github.com/miaouai/bureaucracy-empire.git
+cd bureaucracy-empire
+
+# 2. 复制到 active_skills
+cp -r . /app/working/active_skills/bureaucracy-empire/
+
+# 3. 确保 AGENTS.md 中有触发词配置
+# 查看 AGENTS.md 是否包含以下内容：
+grep "🍀圣旨到" /app/working/AGENTS.md
+```
+
+### 验证安装
+
+```bash
+# 确认文件结构完整
+ls -la /app/working/active_skills/bureaucracy-empire/
+
+# 应该看到：
+# ├── SKILL.md          ✅
+# ├── 组织结构.md        ✅
+# ├── README.md         ✅
+# ├── memory/           ✅
+# ├── templates/        ✅
+# ├── scripts/          ✅
+└── logs/              ✅
+```
+
+### 触发机制说明
+
+**核心原理**: 每次对话时，Agent 会扫描用户消息，如果检测到 `🍀圣旨到！`，则：
+
+1. 读取 `SKILL.md` 获取技能定义
+2. 按照五阶段流程执行
+3. 所有产出保存到 `logs/` 目录
+
+**不需要额外的配置文件**——只要 AGENTS.md 有触发词映射即可！
+
+---
+
 ## 🎯 激活条件
 
 **唯一触发方式：** 消息包含 `🍀圣旨到！`
@@ -108,35 +169,29 @@ enabled: true
 bureaucracy-empire/
 ├── SKILL.md                  # 本说明文档
 ├── 组织结构.md               # 详细职责定义
+├── README.md                 # 使用手册
 ├── memory/
 │   ├── 内阁/
-│   │   ├── 首席军师.md
-│   │   ├── 财政顾问.md
+│   │   ├── 首席军师_卧龙.md
+│   │   ├── 全员档案.md
 │   │   └── ... (10 人档案)
 │   ├── 尚书省/
 │   │   └── 宰相心得.md
 │   └── 六部/
-│       ├── 吏部尚书.md
-│       ├── 户部尚书.md
+│       ├── 六部首脑.md
 │       └── ... (6 部长官)
 ├── templates/
 │   ├── 圣旨模板.md
-│   ├── 议政纪要模板.md
-│   ├── 发配令模板.md
-│   └── 奏折模板.md
-└── logs/
+│   ├── 议政纪要.md
+│   ├── 发配令.md
+│   └── 奏折.md
+├── scripts/
+│   └── activate.sh           # 激活脚本（可选）
+└── logs/                     # 运行时自动生成
     ├── 圣旨.log
+    ├── 自进化.log
     ├── 议政录/YYYY-MM-DD-任务名.md
     └── 奏折集/...
-```
-
----
-
-## ⚡ 启动脚本
-
-```bash
-# 在 Copaw 中当检测到"🍀圣旨到！"时自动加载
-source /app/working/customized_skills/bureaucracy-empire/scripts/activate.sh
 ```
 
 ---
@@ -180,4 +235,4 @@ source /app/working/customized_skills/bureaucracy-empire/scripts/activate.sh
 
 ---
 
-*任务已完成*
+*技能已就绪，等待圣旨* 🍀
